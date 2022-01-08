@@ -15,7 +15,8 @@ class CreateAppsettingsTable extends Migration
     {
         Schema::create('appsettings', function (Blueprint $table) {
             $table->id();
-            $table->integer('default_testing_timespan')->nullable();
+            $table->integer('test_time')->nullable();// Duration of testing
+            $table->integer('questionNo')->nullable();// Number of question to allow testing
             $table->timestamps();
         });
     }

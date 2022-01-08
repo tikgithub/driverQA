@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\QuestionController;
@@ -49,4 +50,8 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     /** Choice Controller */
     Route::get('/choice/edit/{id}/{choice_id}',[ChoiceController::class,'edit'])->name('editChoice');
     Route::post('/choice/update',[ChoiceController::class,'update'])->name('updateChoice');
+
+    /** Test Setting Controller */
+    Route::get('/test/setting',[AdminController::class,'appSettingPage'])->name('appSettingPage');
+    Route::post('/test',[AppSettingController::class,'update'])->name('appSettingUpdate');
 });

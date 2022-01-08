@@ -76,7 +76,7 @@
                                 <div class="mb-2">
                                     <label for="pointing" class="form-label NotoSanFont">ຫົວຂໍ້</label>
                                     <input type="text" name="pointing" id="pointing"
-                                        class="form-control {{ $errors->has('pointing') ? 'border-danger' : '' }} NotoSanFont"
+                                        class="form-control form-control-lg bg-warning {{ $errors->has('pointing') ? 'border-danger' : '' }} NotoSanFont"
                                         style="width: 100px;" value="{{ isset($choice->pointing) ? $choice->pointing : '' }}">
                                     @if ($errors->has('pointing'))
                                         <small

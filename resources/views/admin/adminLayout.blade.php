@@ -26,23 +26,22 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item dropdown">
+              {{-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active NotoSanFont" href="#" id="dataManagement" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     ຈັດການຂໍ້ມູນ
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="dataManagement">
                     <li><a class="dropdown-item NotoSanFont" href="{{route('questionIndex')}}">ຄຳຖາມສອບເສັງ</a></li>
-                    <li><a class="dropdown-item NotoSanFont" href="#">ກຳນົດເວລາສອບເສັງ</a></li>
-                    {{-- <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+                    <li><a class="dropdown-item NotoSanFont" href="{{route('appSettingPage')}}">ຕັ້ງຄ່າການສອບເສັງ</a></li>
+          
                   </ul>
-              </li>
-              {{-- <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
               </li> --}}
+              <li class="nav-item">
+                <a class="nav-link NotoSanFont active" href="{{route('questionIndex')}}">ຄຳຖາມສອບເສັງ</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link NotoSanFont active" href="{{route('appSettingPage')}}">ຕັ້ງຄ່າການສອບເສັງ</a>
+              </li>
             </ul>
             <span class="navbar-text">
               <a href="{{route('admin_Logout')}}" class="btn btn-light NotoSanFont text-dark"><i class="bi bi-power"></i> ອອກຈາກລະບົບ</a>
