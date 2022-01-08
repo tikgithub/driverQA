@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Choice;
 use App\Models\questions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -65,8 +66,11 @@ class QuestionController extends Controller
      */
     public function edit($id){
         $question = questions::find($id);
+        $choices = Choice::where('question_id','=',$id)->get();
 
-        return view('admin.question.question-edit')->with('question',$question);
+        return view('admin.question.question-edit')
+        ->with('question',$question)
+        ->with('choices',$choices);
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\WorkerController;
@@ -41,4 +42,5 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     Route::post('/question',[QuestionController::class,'store'])->name('questionStore');
     Route::get('/question/edit/{id}',[QuestionController::class,'edit'])->name('questionEdit');
     Route::post('/question/edit',[QuestionController::class,'update'])->name('questionUpdate');
+    Route::post('/choice',[ChoiceController::class,'store'])->name('storeChoice');
 });
