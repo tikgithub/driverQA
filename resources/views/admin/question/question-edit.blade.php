@@ -41,9 +41,10 @@
                    </form>
                </div>
                <div class="col-md-8">
-                    <h4 class="NotoSanFont">ຊຸດຄຳຕອບ</h4>
+                   
                     <div class="row">
                         <div class="col-md-4">
+                            <h4 class="NotoSanFont">ເພີ່ມຄຳຕອບ</h4>
                             <div class="mb-2">
                                 <label for="answer" class="form-label NotoSanFont">ຄຳຕອບ</label>
                                 <input type="text" name="answer" id="answer" class="form-control">
@@ -57,9 +58,14 @@
                             <div class="mb-3 text-center">
                                 <button type="submit" class="btn btn-danger NotoSanFont">ເພີ່ມຄຳຕອບ</button>
                             </div>
+                           
                         </div>
-                        <div class="col-md-8">
-
+                        <div class="col-md-1">
+                            <div class="vl"></div>
+                        </div>
+                        <div class="col-md-7">
+                           
+                            <h3 class="NotoSanFont">ລາຍການຄຳຕອບ</h3>
                         </div>
                     </div>
                </div>

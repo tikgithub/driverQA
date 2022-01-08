@@ -7,3 +7,8 @@
 .NotoSanFont{
     font-family: NotoSanLao;
 }
+
+.vl{
+  border-left: 1px solid black;
+  height: 500px;
+}
