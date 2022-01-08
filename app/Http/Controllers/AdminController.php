@@ -21,7 +21,7 @@ class AdminController extends Controller
     public function questionPage()
     {
 
-        $questionList = questions::paginate(10);
+        $questionList = questions::paginate(50);
 
         return view('admin.question.index')->with('questions', $questionList);
     }
