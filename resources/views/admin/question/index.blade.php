@@ -19,7 +19,7 @@
         <div class="card-body">
             <div class="row">
                 {{-- start form --}}
-                <form class="col-md-4 shadow" action="{{route('questionStore')}}" method="POST" enctype="multipart/form-data">
+                <form class="col-md-4" action="{{route('questionStore')}}" method="POST" enctype="multipart/form-data">
                     @include('flashMessage')
                     @csrf
                     {{-- question textbox --}}

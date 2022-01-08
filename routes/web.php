@@ -39,5 +39,6 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     /** Question Controller */
     Route::get('/question',[AdminController::class,'questionPage'])->name('questionIndex');
     Route::post('/question',[QuestionController::class,'store'])->name('questionStore');
-    Route::get('/question/{id}',[QuestionController::class,'edit'])->name('questionEdit');
+    Route::get('/question/edit/{id}',[QuestionController::class,'edit'])->name('questionEdit');
+    Route::post('/question/edit',[QuestionController::class,'update'])->name('questionUpdate');
 });
