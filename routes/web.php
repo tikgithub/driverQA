@@ -35,6 +35,7 @@ Route::post('/login',[LoginController::class,'validateUser'])->name('postLogin')
  * Protect Route for Admin Role
  */
 Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
+    
     Route::get('/home',[AdminController::class,'index'])->name('admin_home');
     Route::get('/logout',[LoginController::class,'logout'])->name('admin_Logout');
     /** Question Controller */
@@ -43,4 +44,9 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     Route::get('/question/edit/{id}',[QuestionController::class,'edit'])->name('questionEdit');
     Route::post('/question/edit',[QuestionController::class,'update'])->name('questionUpdate');
     Route::post('/choice',[ChoiceController::class,'store'])->name('storeChoice');
+    Route::get('/question/update_correct_answser/{choice_id}/{question_id}',[QuestionController::class,'updateCorrectAnswer'])->name('questionUpdateCorrectAnswer');
+
+    /** Choice Controller */
+    Route::get('/choice/edit/{id}/{choice_id}',[ChoiceController::class,'edit'])->name('editChoice');
+    Route::post('/choice/update',[ChoiceController::class,'update'])->name('updateChoice');
 });

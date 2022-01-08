@@ -128,4 +128,22 @@ class QuestionController extends Controller
              return redirect()->route('getLogin')->with('error', 'ເກີດຂໍ້ຜິດພາດຈາກລະບົບ');
          }
     }
+
+    /**
+     * Function to update the correct answer
+     */
+    public function updateCorrectAnswer($choice_id,$question_id){
+        //Find choice and question
+        $choice = Choice::find($choice_id);
+
+        $question = questions::find($question_id);
+
+        $question->correct_answer = $choice->pointing;
+
+        if($question->save()){
+            return redirect()->back()->with('success','ດຳເນີນການສຳເລັດ');
+        }else{
+            return redirect()->route('getLogin')->with('error', 'ເກີດຂໍ້ຜິດພາດຈາກລະບົບ');
+        }
+    }
 }

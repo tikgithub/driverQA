@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->longText('question');
             $table->longText('photo')->nullable();
-            $table->integer('correct_answer')->nullable();
+            $table->string('correct_answer')->nullable();
             $table->timestamps();
         });
     }
