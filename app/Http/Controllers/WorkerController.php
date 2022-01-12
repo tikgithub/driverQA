@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AnswerPaper;
 use App\Models\appsetting;
+use App\Models\Choice;
+use App\Models\QuestionPaper;
+use App\Models\questions;
 use App\Models\registerTest;
 use App\Models\TestType;
 use Illuminate\Http\Request;
@@ -14,34 +18,53 @@ class WorkerController extends Controller
      *  For User input Name and their driver ID from school
      *  Location: /views/start.blade.php
      */
-    public function starterPage(){
+    public function starterPage()
+    {
         //Load Test Type Data
         $testTypes = TestType::all();
-        return view('start')->with('testTypes',$testTypes);
+        return view('start')->with('testTypes', $testTypes);
     }
 
     /**
      * Function to submit data from starter page
      * Rule Check Input ID compare with Testing Type
      */
-    public function validateStarter(Request $req){
-        $req->validate([
-            'testerFullname' => 'required',
-            'testingNo' => 'required',
-            'testTypeId' => 'required'
-        ],
-        [
-            'testerFullname.required' => 'ກະລຸນາໃສ່ຊີ່ຜູ້ສອບເສັງ',
-            'testingNo.required' => 'ກະລຸນາໃສ່ເລກທີ່ສອບເສັງ',
-            'testTypeId.required' => 'ກະລຸນາເລືອກປະເພດຂອງການສອບເສັງ'
-        ]);
-        
+    public function validateStarter(Request $req)
+    {
+        $req->validate(
+            [
+                'testerFullname' => 'required',
+                'testingNo' => 'required',
+                'testTypeId' => 'required'
+            ],
+            [
+                'testerFullname.required' => 'ກະລຸນາໃສ່ຊີ່ຜູ້ສອບເສັງ',
+                'testingNo.required' => 'ກະລຸນາໃສ່ເລກທີ່ສອບເສັງ',
+                'testTypeId.required' => 'ກະລຸນາເລືອກປະເພດຂອງການສອບເສັງ'
+            ]
+        );
+
         //Check tester has been tested alread?
         //Condition depend on the TestType
 
-        $unique = registerTest::where('testingNo','=',$req->input('testingNo'),'and')->where('testTypeId','=',$req->input('testTypeId'))->first();
+        $unique = registerTest::where('testingNo', '=', $req->input('testingNo'), 'and')->where('testTypeId', '=', $req->input('testTypeId'))->first();
+        //Get the testing timespan
+        $settings = appsetting::find(1)->first();
         //Check if unique then return to start page
         if($unique!=null){
+            
+            //Check the testing is timeout or not
+            //When not timeout then check the question does user answer ? 
+            if($unique->testing_timespan != 0){
+                $questionHasBeenAnswer = QuestionPaper::where('ticket_id','=',$unique->id,'and')->where('answer_selected','=',NULL)->get();
+                if(sizeof($questionHasBeenAnswer)>0){
+                    //Set session
+                    session(['ticket'=>$unique->id]);
+                    //Redirect to testing page
+                    return redirect()->route('doTest');
+                }
+            }
+            
             return redirect()->route('starterPage')->with('error','ທ່ານໄດ້ສອບເສັງໃນປະເພດນີ້ແລ້ວ')->withInput();
         }
         //Perform save data and contionue to Testing page
@@ -50,12 +73,50 @@ class WorkerController extends Controller
         $reg->testingNo = $req->input('testingNo');
         $reg->testTypeId = $req->input('testTypeId');
 
-        //Get the testing timespan
-        $time = appsetting::find(1)->default_testing_timespan;
-        $reg->testing_timespan = $time;
+        
+        $reg->testing_timespan = $settings->test_time;
         /** Save to database */
         $registerDetail = $reg->save();
+        // Operation To generate random question for this user with number of question in DB
+        $ranDomQuestion = questions::inRandomOrder()->limit($settings->questionNo)->get();
 
-        dd($reg);
+        // Loop and Add Random question to test paper table
+        for ($i = 0; $i < sizeof($ranDomQuestion); $i++) {
+
+            //Insert the question detail to the table
+            $questPaper = new QuestionPaper();
+            $questPaper->ticket_id = $reg->id;
+            $questPaper->question_string = $ranDomQuestion[$i]->question;
+            $questPaper->photo= $ranDomQuestion[$i]->photo;
+            $questPaper->save();
+
+            //Insert the answer for each question
+            $answerList = Choice::where('question_id','=',$ranDomQuestion[$i]->id)->get();
+           // dd($answerList);
+
+           //Save the answer
+            for($j=0; $j < sizeof($answerList);$j++){
+                $answer = new AnswerPaper();
+                $answer->paper_id = $questPaper->id;
+                $answer->answer_text = $answerList[$j]->answer;
+                $answer->answer_title = $answerList[$j]->pointing;
+                $answer->save();
+            }
+        }
+       
+        //Set Session and redirect to testing page
+        //Set ticket id
+        session(['ticket'=>$questPaper->ticket_id]);
+        //Redirect to testing page
+        return redirect()->route('doTest');
+    }
+
+    /** 
+     * Function to call the testing page of user
+     */
+    public function doTest(){
+        //Get session ticket
+        $ticket = session('ticket');
+        return view('testscreen');
     }
 }

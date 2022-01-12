@@ -55,3 +55,7 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     Route::get('/test/setting',[AdminController::class,'appSettingPage'])->name('appSettingPage');
     Route::post('/test',[AppSettingController::class,'update'])->name('appSettingUpdate');
 });
+
+Route::group(['prefix'=>'testing','middleware'=>'sessionAuth'],function(){
+    Route::get('/dotest',[WorkerController::class,'doTest'])->name('doTest');
+});
