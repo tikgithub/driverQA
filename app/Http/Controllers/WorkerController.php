@@ -119,4 +119,11 @@ class WorkerController extends Controller
         $ticket = session('ticket');
         return view('testscreen');
     }
+
+    /**
+     * Function to return session
+     */
+    public function getSession(){
+        return response()->json(session('ticket'));
+    }
 }

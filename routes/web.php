@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\API\DoTestController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\LoginController;
@@ -58,4 +59,8 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
 
 Route::group(['prefix'=>'testing','middleware'=>'sessionAuth'],function(){
     Route::get('/dotest',[WorkerController::class,'doTest'])->name('doTest');
+  
+    Route::get('/getsession',[WorkerController::class,'getSession'])->name('getSession');
 });
+
+
