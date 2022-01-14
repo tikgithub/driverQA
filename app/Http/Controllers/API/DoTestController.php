@@ -30,6 +30,7 @@ class DoTestController extends Controller
         return response()->json(["question"=>QuestionPaper::find($id),'Answers'=>$answers]);
     }
 
+    /** Function to select answer and save to db */
     public function selectAnswer($question_id, $answer_id){
         $questPaper = QuestionPaper::find($question_id);
         $questPaper->answer_selected = $answer_id;
@@ -39,4 +40,5 @@ class DoTestController extends Controller
             return response(500);
         }
     }
+
 }
