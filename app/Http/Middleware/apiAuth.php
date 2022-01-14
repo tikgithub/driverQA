@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class sessionAuth
+class apiAuth
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,9 @@ class sessionAuth
      */
     public function handle(Request $request, Closure $next)
     {
-       
         if (session('ticket')) {
             return $next($request);
         }
-        return redirect()->route('starterPage');
+        return response()->status(403);
     }
 }

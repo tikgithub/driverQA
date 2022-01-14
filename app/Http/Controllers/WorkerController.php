@@ -11,6 +11,7 @@ use App\Models\registerTest;
 use App\Models\TestType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class WorkerController extends Controller
 {
@@ -60,6 +61,7 @@ class WorkerController extends Controller
                 if(sizeof($questionHasBeenAnswer)>0){
                     //Set session
                     session(['ticket'=>$unique->id]);
+                    session()->save();
                     //Redirect to testing page
                     return redirect()->route('doTest');
                 }
@@ -107,6 +109,7 @@ class WorkerController extends Controller
         //Set Session and redirect to testing page
         //Set ticket id
         session(['ticket'=>$questPaper->ticket_id]);
+        session()->save();
         //Redirect to testing page
         return redirect()->route('doTest');
     }
@@ -117,7 +120,15 @@ class WorkerController extends Controller
     public function doTest(){
         //Get session ticket
         $ticket = session('ticket');
-        return view('testscreen');
+        //Get question list to the view by ticket
+        $questions = QuestionPaper::where('ticket_id','=',$ticket)->get();
+        //Get test type
+        $registerTest = registerTest::find($ticket);
+        $testype = TestType::find($registerTest->testTypeId);
+
+        return view('testscreen')->with('questions',$questions)
+        ->with("testType",$testype)
+        ->with('register',$registerTest);
     }
 
     /**
@@ -125,5 +136,22 @@ class WorkerController extends Controller
      */
     public function getSession(){
         return response()->json(session('ticket'));
+    }
+
+    /** Function to logout or stop the exam */
+    public function stopExamp(){
+        
+        Session::flush();
+        return redirect()->route('starterPage');
+    }
+
+    /** Function to return crsf_token as json */
+    public function showToken(){
+        return response()->json(csrf_token());
+    }
+
+    public function testJson(){
+        $jsonstr = "{\n    timer:'1200'\n}";
+        dd(json_decode($jsonstr));
     }
 }

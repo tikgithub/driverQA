@@ -5,6 +5,7 @@ use App\Http\Controllers\API\DoTestController;
 use App\Http\Controllers\AppSettingController;
 use App\Http\Controllers\ChoiceController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PerformTestController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\WorkerController;
 use Illuminate\Auth\Events\Login;
@@ -32,7 +33,8 @@ Route::post('/starter',[WorkerController::class,'validateStarter'])->name('valid
 Route::get('/login',[LoginController::class,'index'])->name('getLogin');
 /** Validate User Login */
 Route::post('/login',[LoginController::class,'validateUser'])->name('postLogin');
-
+/** Show csrf_token() */
+Route::get('/gettoken',[WorkerController::class,'showToken']);
 /**
  * Protect Route for Admin Role
  */
@@ -57,10 +59,15 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     Route::post('/test',[AppSettingController::class,'update'])->name('appSettingUpdate');
 });
 
-Route::group(['prefix'=>'testing','middleware'=>'sessionAuth'],function(){
+Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
+    //Route to examing page
     Route::get('/dotest',[WorkerController::class,'doTest'])->name('doTest');
-  
+    //Route for api to get session (testing only)
     Route::get('/getsession',[WorkerController::class,'getSession'])->name('getSession');
-});
+    //Route for stopping exam or quite exam (Still keep old data in DB)
+    Route::get('/stopexamp',[WorkerController::class,'stopExamp'])->name('stopExamp');
 
+
+    
+});
 
