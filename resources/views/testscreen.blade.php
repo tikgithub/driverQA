@@ -7,6 +7,7 @@
     <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('customStyle/app.css') }}">
+    <link rel="stylesheet" href="{{asset('customStyle/loading.css')}}">
     <style>
         .sidenav {
             height: 100%;
@@ -20,6 +21,7 @@
             padding-top: 20px;
             padding-left: 10px;
             padding-right: 10px;
+            align-items: center;
         }
 
         .sidenav a {
@@ -44,7 +46,7 @@
 
         .questionBtn {
             padding: 10px;
-            width: 150px;
+            width: 120px;
             font-size: 18pt;
             border: 1px #000 solid;
             background-color: #ffffff;
@@ -59,42 +61,52 @@
 
 <body>
 
-    <div class="sidenav">
-        <h4 class="NotoSanFont text-center">ກົດເພື່ອຂ້າມໄປຂໍ້ທີ່ຕ້ອງການຕອບ {{ session('ticket') }}</h4>
+    <div class="sidenav text-center" id="questionButtonContainer">
+        <div class="text-center mt-2">
+            <img src="{{ asset('image/logo.png') }}" alt="" srcset="" width="auto" height="100"
+                class="rounded-circle">
+        </div>
+        <h4 class="NotoSanFont text-center mt-2">ກົດເພື່ອຂ້າມໄປຂໍ້ທີ່ຕ້ອງການຕອບ</h4>
         @php
             $i = 0;
         @endphp
 
         @foreach ($questions as $question)
-            <button id="{{ $question->id }}" class="btn NotoSanFont mb-2 questionBtn" {{($question->answer_selected)? "style=background-color:green":''}}
-                onclick="onQuestionClick({{ $question->id }})">{{ $i + 1 }}</button>
+            <button id="{{ $question->id }}" class="btn NotoSanFont mb-2 questionBtn"
+                {{ $question->answer_selected ? 'style=background-color:green' : '' }}
+                onclick="onQuestionClick({{ $question->id }})"
+                {{ $question->answer_selected ? "questionAnswerd=$question->id" : '' }}>{{ $i + 1 }}</button>
             @php
-                $i++;       
+                $i++;
             @endphp
         @endforeach
-        <div class="text-center mt-2">
-            <img src="{{ asset('image/logo.png') }}" alt="" srcset="" width="auto" height="150" class="rounded-circle">
-        </div>
+
     </div>
 
     <div class="main mt-2">
         <div class="container-fluid">
-            <div class="row" style="padding-bottom: 1000px;">
-                <div class="col-md-10">
-                    <h3 class="NotoSanFont">ຊື່ຜູ້ສອບເສັງ:{{ $register->testerFullname }},
-                        ເລກທີ່ສອບເສັງ:{{ $register->testingNo }}, ປະເພດສອບເສັງ: <b
-                            class="text-danger">{{ $testType->name }}</b></h3>
-                    <hr>
-                    <h3 class="NotoSanFont" id="question">ຄຳຖາມ: <b id="displayQuestion"></b></h3>
-                    <hr>
-                    {{-- Area for display image if it is exist --}}
-                    <div id="imageArea" class="mt-1">
+            <div class="row">
+                <div class="col-md-10 ">
+                    <div id="mainScreen">
+                        <h3 class="NotoSanFont">ຊື່ຜູ້ສອບເສັງ:{{ $register->testerFullname }},
+                            ເລກທີ່ສອບເສັງ:{{ $register->testingNo }}, ປະເພດສອບເສັງ: <b
+                                class="text-danger">{{ $testType->name }}</b></h3>
+                        <hr>
+                        <h3 class="NotoSanFont" id="question">ຄຳຖາມ: <b id="displayQuestion"></b></h3>
+                        <hr>
+                        {{-- Area for display image if it is exist --}}
+                        <div id="imageArea" class="mt-1">
 
+                        </div>
+                        {{-- List for answer --}}
+                        <ul id="choiceList" class="NotoSanFont">
+
+                        </ul>
                     </div>
-                    {{-- List for answer --}}
-                    <ul id="choiceList" class="NotoSanFont">
-
-                    </ul>
+                   <div id="loadingScreen" class="text-center NotoSanFont" style="margin: auto;padding-top:200px; width: 18%; display:none;">
+                    <div  class="loader"></div>
+                    ກະລຸນາລໍຖ້າ
+                   </div>
                 </div>
                 <div class="col-md-2 border-left">
                     <div class="fs-3 fw-bold text-danger border p-1 text-center bg-dark" id="counterDisplay">
@@ -121,11 +133,28 @@
     let time = {{ $register->testing_timespan }};
     let REMEBER_SELECT_BUTTON = "";
     let REMEMBER_ANSWER_SELECT = "";
+    let NUMBER_OF_ANSWER_QUESTION = [];
+
+    //After loading page complete
+    //Collect the answer have been answer to array list
+    window.onload = function() {
+        var questionButtonContainer = document.getElementById('questionButtonContainer').getElementsByTagName(
+            'button');
+        for (i = 0; i < questionButtonContainer.length; i++) {
+            let btn = questionButtonContainer[i];
+            let answer_id = btn.getAttribute('questionAnswerd');
+            if (answer_id != '' && answer_id != null) {
+                NUMBER_OF_ANSWER_QUESTION.push(answer_id);
+            }
+
+        }
+    };
 
     //Function when question click
     function onQuestionClick(quest_id) {
+
         btnCurrentClick = document.getElementById(quest_id);
-        btnCurrentClick.style.cssText += "background-color: yellow;";
+
         callQuestion(quest_id);
         //Change color when select button
         if (REMEBER_SELECT_BUTTON != "") {
@@ -134,55 +163,80 @@
         REMEBER_SELECT_BUTTON = quest_id;
         REMEMBER_ANSWER_SELECT = "";
 
+        var questionButtonContainer = document.getElementById('questionButtonContainer').getElementsByTagName(
+            'button');
+
+        for (i = 0; i < NUMBER_OF_ANSWER_QUESTION.length; i++) {
+
+            for (j = 0; j < questionButtonContainer.length; j++) {
+                var childButton = questionButtonContainer[j];
+
+                let childButtonID = childButton.getAttribute('questionAnswerd');
+
+
+                if (childButtonID == NUMBER_OF_ANSWER_QUESTION[i]) {
+
+                    childButton.style.cssText = "background-color:green";
+                }
+            }
+        }
+        btnCurrentClick.style.cssText += "background-color: yellow;";
+
 
     }
 
     //Function When answer has been selected
-    function onAnswerSelected(quest_id,answer_id) {
+    function onAnswerSelected(quest_id, answer_id) {
+
         buttonID = 'answer' + answer_id;
-        //If the answer button already pass before
-        if (REMEMBER_ANSWER_SELECT) {
-            //If Same button was clicked
-           
-            console.log(REMEMBER_ANSWER_SELECT);
-            var oldButton = document.getElementById(REMEMBER_ANSWER_SELECT);
-            oldButton.style.cssText = "padding-left:40px; padding-right:40px;";
-        }
-
         //Reset Button Color
-        var answerContainer = document.getElementById('answers');
-        console.log(answerContainer);
-
-
+        var answerContainer = document.getElementById('answers').getElementsByTagName('a');
+        for (i = 0; i < answerContainer.length; i++) {
+            var child = answerContainer[i];
+            child.style.cssText = "padding-left:40px; padding-right:40px;";
+        }
 
 
         var thisBtn = document.getElementById(buttonID);
         thisBtn.style.cssText = "background-color:green;padding-left:40px; padding-right:40px;";
         REMEMBER_ANSWER_SELECT = buttonID;
 
-        fetch(window.location.origin + '/api/answer_question/' + quest_id + '/' + answer_id,{
-            method: 'get',
-            headers:{
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res=>res.json())
-        .then(data=>{
-            console.log(data);
-        });
+        fetch(window.location.origin + '/api/answer_question/' + quest_id + '/' + answer_id, {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data);
+            });
+
+        if (!NUMBER_OF_ANSWER_QUESTION.includes(quest_id.toString())) {
+            NUMBER_OF_ANSWER_QUESTION.push(quest_id);
+            document.getElementById(quest_id).setAttribute('questionAnswerd', quest_id);
+        }
+
     }
 
     //Function call API to get question and answer detail
     function callQuestion(quest_id) {
-        fetch('/api/getquestion/' + quest_id, {
+        let mainSection = document.getElementById('mainScreen');
+        mainSection.style.cssText = "display:none";
+        let loadingScreen = document.getElementById('loadingScreen');
+        loadingScreen.style.cssText = "margin: auto;padding-top:200px; width: 18%; display:block;";
+        let answers = document.getElementById('answers');
+        answers.style.cssText = "display:none";
+
+        fetch(window.location.origin + '/api/getquestion/' + quest_id, {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json'
                 },
             }).then(res => res.json())
             .then(data => {
-                //Get question data and display to screen
-                console.log(data);
+                //Hide main screen
+
                 //element to show question
                 document.getElementById('displayQuestion').innerHTML = data.question['question_string'];
                 //Element to show answer
@@ -218,19 +272,29 @@
                     answerBtn.classList.add('NotoSanFont', 'btn', 'btn-danger', 'me-4', 'fs-2');
                     answerBtn.style.cssText = 'padding-left:40px; padding-right:40px;';
                     //Check answer click ?
-                    if(answers[i].id == data.question['answer_selected']){
+                    if (answers[i].id == data.question['answer_selected']) {
                         answerBtn.style.cssText = "padding-left:40px; padding-right:40px;background-color:green";
                     }
                     answerBtn.setAttribute('id', 'answer' + answers[i].id);
                     //answerBtn.setAttribute('href',window.location.origin+ '/' + 'answer_question/' + quest_id +'/' + answers[i].id);
                     answerBtn.onclick = function() {
-                        onAnswerSelected(quest_id,answers[i].id)
+                        onAnswerSelected(quest_id, answers[i].id)
                     };
                     answerContainer.appendChild(answerBtn);
                     //answerBtn.style.cssText = "background-color: #fff;";
 
                 }
 
+                /// Show main screen
+                mainSection.style.cssText = "display:block";
+                loadingScreen.style.cssText = "margin: auto;padding-top:200px; width: 18%; display:none;";
+                answers.style.cssText = "display:block";
+
+            }).catch((error) => {
+                loadingScreen.style.cssText = "margin: auto;padding-top:200px; width: 18%; display:none;";
+                  /// Show main screen
+                  mainSection.style.cssText = "display:block";
+                  answers.style.cssText = "display:block";
             });
     }
 
@@ -258,7 +322,7 @@
     //Update for when this user come to test again later
     setInterval(() => {
         //updateUserTimer(time);
-        console.log('Fect 5 sec ');
+        //  console.log('Fect 5 sec ');
         updateUserTimer(time);
     }, 5000);
 
@@ -267,7 +331,7 @@
         var data = {
             'timer': time
         };
-        fetch('/api/update_user_timer', {
+        fetch(window.location.origin + '/api/update_user_timer', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',
