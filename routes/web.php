@@ -66,8 +66,9 @@ Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
     Route::get('/getsession',[WorkerController::class,'getSession'])->name('getSession');
     //Route for stopping exam or quite exam (Still keep old data in DB)
     Route::get('/stopexamp',[WorkerController::class,'stopExamp'])->name('stopExamp');
-
-
-    
+    //Finish the exam route
+    Route::get('/finish_exam',[DoTestController::class,'submitExam'])->name('submitExam');
+    //Route for display testing result
+    Route::get('/testing_result',[DoTestController::class,'showTestResult'])->name('showTestResult');
 });
 

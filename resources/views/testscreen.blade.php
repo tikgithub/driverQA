@@ -7,7 +7,8 @@
     <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('customStyle/app.css') }}">
-    <link rel="stylesheet" href="{{asset('customStyle/loading.css')}}">
+    <link rel="stylesheet" href="{{ asset('customStyle/loading.css') }}">
+    <link rel="stylesheet" href="{{asset('bootstrap-icons/font/bootstrap-icons.css')}}">
     <style>
         .sidenav {
             height: 100%;
@@ -63,8 +64,7 @@
 
     <div class="sidenav text-center" id="questionButtonContainer">
         <div class="text-center mt-2">
-            <img src="{{ asset('image/logo.png') }}" alt="" srcset="" width="auto" height="100"
-                class="rounded-circle">
+            <img src="{{ asset('image/logo.png') }}" alt="" srcset="" width="auto" height="100" class="rounded-circle">
         </div>
         <h4 class="NotoSanFont text-center mt-2">ກົດເພື່ອຂ້າມໄປຂໍ້ທີ່ຕ້ອງການຕອບ</h4>
         @php
@@ -103,30 +103,31 @@
 
                         </ul>
                     </div>
-                   <div id="loadingScreen" class="text-center NotoSanFont" style="margin: auto;padding-top:200px; width: 18%; display:none;">
-                    <div  class="loader"></div>
-                    ກະລຸນາລໍຖ້າ
-                   </div>
+                    <div id="loadingScreen" class="text-center NotoSanFont"
+                        style="margin: auto;padding-top:200px; width: 18%; display:none;">
+                        <div class="loader"></div>
+                        ກະລຸນາລໍຖ້າ
+                    </div>
                 </div>
                 <div class="col-md-2 border-left">
-                    <div class="fs-3 fw-bold text-danger border p-1 text-center bg-dark" id="counterDisplay">
-                        Loading...
-                    </div>
-                    <p class="mt-3">
-                        <a href="{{ route('stopExamp') }}"
-                            class="btn btn-danger NotoSanFont btn-lg">ຢຸດການສອບເສັງ</a>
-                    </p>
+                 
+                   
                 </div>
+            </div>
+            <hr>
+            <div id="answers" class="text-center">
+           
+            </div>
+    
+            <div class="fixed-bottom main mb-3 " style="display: inline-flex">
+                <a href="{{ route('stopExamp') }}" class="btn btn-danger NotoSanFont btn-lg me-2"><i class="bi bi-stop-circle"></i> ພັກການສອບເສັງ</a>
+                <a href="{{ route('submitExam') }}" class="btn btn-success NotoSanFont btn-lg me-2"><i class="bi bi-upload"></i> ສົ່ງບົດສອບເສັງ</a>
+                <div class="fs-3 fw-bold text-danger border p-1 text-center bg-dark" id="counterDisplay" style="width: 150px;">Loading...</div>
             </div>
         </div>
     </div>
 
-    <nav class="navbar footer fixed-bottom navbar-dark bg-dark" style="height: 150px;">
-        <div class="container-fluid">
-            {{-- Container to show the choice button --}}
-            <div id="answers" class=""></div>
-        </div>
-    </nav>
+  
 </body>
 <script>
     let i = 1;
@@ -292,9 +293,9 @@
 
             }).catch((error) => {
                 loadingScreen.style.cssText = "margin: auto;padding-top:200px; width: 18%; display:none;";
-                  /// Show main screen
-                  mainSection.style.cssText = "display:block";
-                  answers.style.cssText = "display:block";
+                /// Show main screen
+                mainSection.style.cssText = "display:block";
+                answers.style.cssText = "display:block";
             });
     }
 

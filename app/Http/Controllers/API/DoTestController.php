@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\AnswerPaper;
 use App\Models\QuestionPaper;
+use App\Models\registerTest;
 use Illuminate\Http\Request;
 
 class DoTestController extends Controller
@@ -39,6 +40,24 @@ class DoTestController extends Controller
         }else{
             return response(500);
         }
+    }
+
+    /** 
+     * Function to submit the test if user finish
+     */
+    public function submitExam(){
+        $ticket_id = session('ticket');
+        $regisTest = registerTest::find($ticket_id);
+        $regisTest->testing_timespan = 0;
+        $regisTest->save();
+        return redirect()->route('showTestResult');
+
+    }
+
+    /** Function to display testing result of user */
+    public function showTestResult(){
+        $ticket_id = session('ticket');
+        dd($ticket_id);
     }
 
 }
