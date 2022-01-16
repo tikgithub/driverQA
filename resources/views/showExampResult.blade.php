@@ -15,7 +15,7 @@
         <div class="row " style="height: 400px;">
             <div class="col-md-12 text-center text-white">
                 <h1 class="NotoSanFont">
-                   <b> ຜົນການສອບເສັງໃບຂັບຂີ່ ພາກທິດສະດີ</b>
+                   <b> ຜົນການສອບເສັງໃບຂັບຂີ່ ພາກທິດສະດີ {{$testType->name}}</b>
                 </h1>
                 <h3 class="NotoSanFont">
                     ຜູ້ສອບເສັງ: <b><U> {{$register->testerFullname}}</U></b>

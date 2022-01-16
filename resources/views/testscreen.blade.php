@@ -311,6 +311,10 @@
         var sec = time - (min * 60);
         document.getElementById("counterDisplay").innerHTML = min + ":" + (sec.toString().length == 1 ? '0' + sec
             .toString() : sec.toString());
+        if(time==0){
+            console.log('time up');
+            location.href= window.location.origin + '/exam/testing_result';
+        }
 
     }
     //Timer running for counting down to show at screen

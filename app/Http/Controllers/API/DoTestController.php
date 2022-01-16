@@ -8,6 +8,7 @@ use App\Models\Choice;
 use App\Models\QuestionPaper;
 use App\Models\questions;
 use App\Models\registerTest;
+use App\Models\TestType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\Console\Question\Question;
@@ -67,6 +68,8 @@ class DoTestController extends Controller
 
         $ticket_id = session('ticket');
         $register = registerTest::find($ticket_id);
+        //Test Type
+        $testType = TestType::find($register->testTypeId);
         //Count all question
         $countAllQuestion = QuestionPaper::where('ticket_id','=',$ticket_id)->count();
         //Question not answered
@@ -93,7 +96,8 @@ class DoTestController extends Controller
         ->with('countQuestionNotAnswered',$countQuestionNotAnswered)
         ->with('countWrongQuestion',$countWrongQuestion)
         ->with('register',$register)
-        ->with('questinoWrongList',$questionWrongList);
+        ->with('questinoWrongList',$questionWrongList)
+        ->with('testType',$testType);
     }
 
 }
