@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class QuestionPaper extends Model
 {
     use HasFactory;
-    protected $fillable = ['ticket_id'];
+    protected $fillable = ['ticket_id','answer_selected_title'];
 }

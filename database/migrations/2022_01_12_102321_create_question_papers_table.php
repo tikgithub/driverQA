@@ -17,6 +17,9 @@ class CreateQuestionPapersTable extends Migration
             $table->id();
             $table->bigInteger('ticket_id');
             $table->text('question_string');
+            $table->bigInteger('question_id');
+            $table->string('correct_answer');
+            $table->string('answer_selected_title');
             $table->longText('photo')->nullable();
             $table->string('answer_selected')->nullable();
             $table->timestamps();

@@ -4,9 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\AnswerPaper;
+use App\Models\Choice;
 use App\Models\QuestionPaper;
+use App\Models\questions;
 use App\Models\registerTest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\Console\Question\Question;
 
 class DoTestController extends Controller
 {
@@ -33,8 +37,11 @@ class DoTestController extends Controller
 
     /** Function to select answer and save to db */
     public function selectAnswer($question_id, $answer_id){
+        $answerData = Choice::find($answer_id);
         $questPaper = QuestionPaper::find($question_id);
-        $questPaper->answer_selected = $answer_id;
+        $questPaper->answer_selected = $answerData->id;
+        $questPaper->answer_selected_title = $answerData->pointing;
+        
         if($questPaper->save()){
             return response(200);
         }else{
@@ -56,8 +63,37 @@ class DoTestController extends Controller
 
     /** Function to display testing result of user */
     public function showTestResult(){
+        $answerDetail = [];
+
         $ticket_id = session('ticket');
-        dd($ticket_id);
+        $register = registerTest::find($ticket_id);
+        //Count all question
+        $countAllQuestion = QuestionPaper::where('ticket_id','=',$ticket_id)->count();
+        //Question not answered
+        $countQuestionNotAnswered = QuestionPaper::where('ticket_id','=',$ticket_id)->where('answer_selected','=',NULL)->count();
+  
+        $countWrongQuestion = DB::select("SELECT * FROM question_papers WHERE  correct_answer != answer_selected_title and ticket_id = ?",[$ticket_id]);
+       // dd($countWrongQuestion);
+
+       //Question not correct list
+       $questionWrongList = DB::select("
+                SELECT qp.question_string,
+            ap.answer_title , ap.answer_text,
+            (CASE 
+                WHEN correct_answer != answer_selected_title THEN 'False'
+                WHEN correct_answer = answer_selected_title THEN 'True'
+                WHEN answer_selected_title is NULL THEN NULL
+            END)
+            as correctOrNot
+            from question_papers qp left join answer_papers ap on ap.id = qp.answer_selected 
+            WHERE qp.ticket_id = ?",[$ticket_id]);
+
+        return view('showExampResult')
+        ->with('countAllQuestion', $countAllQuestion)
+        ->with('countQuestionNotAnswered',$countQuestionNotAnswered)
+        ->with('countWrongQuestion',$countWrongQuestion)
+        ->with('register',$register)
+        ->with('questinoWrongList',$questionWrongList);
     }
 
 }

@@ -58,13 +58,21 @@ class WorkerController extends Controller
             //When not timeout then check the question does user answer ? 
             if($unique->testing_timespan != 0){
                 $questionHasBeenAnswer = QuestionPaper::where('ticket_id','=',$unique->id,'and')->where('answer_selected','=',NULL)->get();
-                if(sizeof($questionHasBeenAnswer)>0){
+                //Check user has answer somequestion ?
+                if(sizeof($questionHasBeenAnswer)>0 ){
                     //Set session
                     session(['ticket'=>$unique->id]);
                     session()->save();
                     //Redirect to testing page
                     return redirect()->route('doTest');
                 }
+            }//Timeout
+            else if($unique->testing_timespan == 0){
+                 //Set session
+                 session(['ticket'=>$unique->id]);
+                 session()->save();
+                 //Redirect to testing page
+                 return redirect()->route('showTestResult');
             }
             
             return redirect()->route('starterPage')->with('error','ທ່ານໄດ້ສອບເສັງໃນປະເພດນີ້ແລ້ວ')->withInput();
@@ -90,6 +98,8 @@ class WorkerController extends Controller
             $questPaper->ticket_id = $reg->id;
             $questPaper->question_string = $ranDomQuestion[$i]->question;
             $questPaper->photo= $ranDomQuestion[$i]->photo;
+            $questPaper->question_id = $ranDomQuestion[$i]->id;
+            $questPaper->correct_answer = $ranDomQuestion[$i]->correct_answer;
             $questPaper->save();
 
             //Insert the answer for each question

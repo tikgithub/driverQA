@@ -22,9 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', function () {return view('welcome');})->name('welcome');
 /** Route to call starter input page */
 Route::get('/starter',[WorkerController::class,'starterPage'])->name('starterPage');
 /** Route to validate the starter submit */
