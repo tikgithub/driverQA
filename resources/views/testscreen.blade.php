@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('customStyle/app.css') }}">
     <link rel="stylesheet" href="{{ asset('customStyle/loading.css') }}">
-    <link rel="stylesheet" href="{{asset('bootstrap-icons/font/bootstrap-icons.css')}}">
+    <link rel="stylesheet" href="{{ asset('bootstrap-icons/font/bootstrap-icons.css') }}">
     <style>
         .sidenav {
             height: 100%;
@@ -73,7 +73,7 @@
 
         @foreach ($questions as $question)
             <button id="{{ $question->id }}" class="btn NotoSanFont mb-2 questionBtn"
-                {{ $question->answer_selected ? 'style=background-color:green' : '' }}
+                {{ $question->answer_selected ? 'style=background-color:green' : '' }} orderBtn={{ $loop->index + 1 }}
                 onclick="onQuestionClick({{ $question->id }})"
                 {{ $question->answer_selected ? "questionAnswerd=$question->id" : '' }}>{{ $i + 1 }}</button>
             @php
@@ -110,24 +110,27 @@
                     </div>
                 </div>
                 <div class="col-md-2 border-left">
-                 
-                   
+
+
                 </div>
             </div>
             <hr>
             <div id="answers" class="text-center">
-           
+
             </div>
-    
+
             <div class="fixed-bottom main mb-3 " style="display: inline-flex">
-                <a href="{{ route('stopExamp') }}" class="btn btn-danger NotoSanFont btn-lg me-2"><i class="bi bi-stop-circle"></i> ພັກການສອບເສັງ</a>
-                <a href="{{ route('submitExam') }}" class="btn btn-success NotoSanFont btn-lg me-2"><i class="bi bi-upload"></i> ສົ່ງບົດສອບເສັງ</a>
-                <div class="fs-3 fw-bold text-danger border p-1 text-center bg-dark" id="counterDisplay" style="width: 150px;">Loading...</div>
+                <a href="{{ route('stopExamp') }}" class="btn btn-danger NotoSanFont btn-lg me-2"><i
+                        class="bi bi-stop-circle"></i> ພັກການສອບເສັງ</a>
+                <a href="{{ route('submitExam') }}" class="btn btn-success NotoSanFont btn-lg me-2"><i
+                        class="bi bi-upload"></i> ສົ່ງບົດສອບເສັງ</a>
+                <div class="fs-3 fw-bold text-danger border p-1 text-center bg-dark" id="counterDisplay"
+                    style="width: 150px;">Loading...</div>
             </div>
         </div>
     </div>
 
-  
+
 </body>
 <script>
     let i = 1;
@@ -217,6 +220,22 @@
             NUMBER_OF_ANSWER_QUESTION.push(quest_id);
             document.getElementById(quest_id).setAttribute('questionAnswerd', quest_id);
         }
+
+        //Get current Order of button when click answer
+        var getOrderBtn = document.getElementById(quest_id).getAttribute('orderBtn');
+        var nextButtonClick = parseInt(getOrderBtn) + 1;
+        console.log(nextButtonClick);
+        //Get Next button should selected
+        //Check how many button there
+        var questionButtonContainer = document.getElementById('questionButtonContainer').getElementsByTagName('button');
+        //Check is it last button ?
+        if (parseInt(getOrderBtn) >= questionButtonContainer.length) {
+            return;
+        }
+        //Get next button
+        var nextButton =document.querySelectorAll("[orderBtn='"+ nextButtonClick +"']")[0].click(); //get current btn + 1 and click
+
+
 
     }
 
@@ -311,9 +330,9 @@
         var sec = time - (min * 60);
         document.getElementById("counterDisplay").innerHTML = min + ":" + (sec.toString().length == 1 ? '0' + sec
             .toString() : sec.toString());
-        if(time==0){
+        if (time == 0) {
             console.log('time up');
-            location.href= window.location.origin + '/exam/testing_result';
+            location.href = window.location.origin + '/exam/testing_result';
         }
 
     }
