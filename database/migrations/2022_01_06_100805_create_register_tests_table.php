@@ -19,6 +19,10 @@ class CreateRegisterTestsTable extends Migration
             $table->string('testingNo')->nullable();
             $table->string('testing_timespan')->nullable();
             $table->string('testTypeId')->nullable();
+            $table->string('contact')->nullable();
+            $table->string('email')->nullable();
+            $table->dateTime('start_test_date')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

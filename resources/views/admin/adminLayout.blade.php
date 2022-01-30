@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
     <link rel="stylesheet" href="{{asset('customStyle/app.css')}}">
     <link rel="stylesheet" href="{{asset('bootstrap-icons/font/bootstrap-icons.css')}}">
-    
+
     <style>
         .nav-logo{
             border-radius: 50%;
@@ -26,21 +26,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {{-- <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle active NotoSanFont" href="#" id="dataManagement" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    ຈັດການຂໍ້ມູນ
-                  </a>
-                  <ul class="dropdown-menu" aria-labelledby="dataManagement">
-                    <li><a class="dropdown-item NotoSanFont" href="{{route('questionIndex')}}">ຄຳຖາມສອບເສັງ</a></li>
-                    <li><a class="dropdown-item NotoSanFont" href="{{route('appSettingPage')}}">ຕັ້ງຄ່າການສອບເສັງ</a></li>
-          
-                  </ul>
-              </li> --}}
+
               <li class="nav-item">
                 <a class="nav-link NotoSanFont active" href="{{route('questionIndex')}}">ຄຳຖາມສອບເສັງ</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link NotoSanFont active" href="{{route('appSettingPage')}}">ຕັ້ງຄ່າການສອບເສັງ</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link NotoSanFont active" href="{{route('TesterShow')}}">ຂໍ້ມູນນັກສອບເສັງ</a>
               </li>
             </ul>
             <span class="navbar-text">
@@ -49,7 +43,7 @@
           </div>
         </div>
       </nav>
-      
+
      <div class="container-fluid pt-3">
         @yield('content')
      </div>

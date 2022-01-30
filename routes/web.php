@@ -36,8 +36,8 @@ Route::get('/gettoken',[WorkerController::class,'showToken']);
 /**
  * Protect Route for Admin Role
  */
-Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
-    
+Route::group(['prefix'=>'admin'],function(){
+
     Route::get('/home',[AdminController::class,'index'])->name('admin_home');
     Route::get('/logout',[LoginController::class,'logout'])->name('admin_Logout');
     /** Question Controller */
@@ -55,6 +55,9 @@ Route::group(['prefix'=>'admin', 'middleware'=>'authAdmin'],function(){
     /** Test Setting Controller */
     Route::get('/test/setting',[AdminController::class,'appSettingPage'])->name('appSettingPage');
     Route::post('/test',[AppSettingController::class,'update'])->name('appSettingUpdate');
+    /** Tester controller */
+    Route::get('/tester',[AdminController::class,'showTesterManagerPage'])->name('TesterShow');
+    Route::post('/tester/store',[AdminController::class,'storeTester'])->name('TesterStore');
 });
 
 Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
