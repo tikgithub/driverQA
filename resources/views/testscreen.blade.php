@@ -138,6 +138,7 @@
     let REMEBER_SELECT_BUTTON = "";
     let REMEMBER_ANSWER_SELECT = "";
     let NUMBER_OF_ANSWER_QUESTION = [];
+    let baseApp = window.location.origin + '{{env('BASE_APP')}}'
 
     //After loading page complete
     //Collect the answer have been answer to array list
@@ -205,7 +206,7 @@
         thisBtn.style.cssText = "background-color:green;padding-left:40px; padding-right:40px;";
         REMEMBER_ANSWER_SELECT = buttonID;
 
-        fetch(window.location.origin + '/api/answer_question/' + quest_id + '/' + answer_id, {
+        fetch(baseApp + '/api/answer_question/' + quest_id + '/' + answer_id, {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json'
@@ -248,7 +249,7 @@
         let answers = document.getElementById('answers');
         answers.style.cssText = "display:none";
 
-        fetch(window.location.origin + '/api/getquestion/' + quest_id, {
+        fetch(baseApp + '/api/getquestion/' + quest_id, {
                 method: 'get',
                 headers: {
                     'Content-Type': 'application/json'
@@ -274,7 +275,7 @@
                 if (data.question['photo']) {
                     var imageBox = document.createElement('img');
                     var imageURL = data.question['photo'];
-                    imageBox.setAttribute('src', window.location.origin + '/' + imageURL);
+                    imageBox.setAttribute('src', baseApp + '/' + imageURL);
                     imageBox.setAttribute('height', '300px');
                     imageBox.setAttribute('width', 'Auto');
                     imageContainer.appendChild(imageBox);
@@ -296,7 +297,7 @@
                         answerBtn.style.cssText = "padding-left:40px; padding-right:40px;background-color:green";
                     }
                     answerBtn.setAttribute('id', 'answer' + answers[i].id);
-                    //answerBtn.setAttribute('href',window.location.origin+ '/' + 'answer_question/' + quest_id +'/' + answers[i].id);
+                    //answerBtn.setAttribute('href',baseApp+ '/' + 'answer_question/' + quest_id +'/' + answers[i].id);
                     answerBtn.onclick = function() {
                         onAnswerSelected(quest_id, answers[i].id)
                     };
@@ -332,7 +333,7 @@
             .toString() : sec.toString());
         if (time == 0) {
             console.log('time up');
-            location.href = window.location.origin + '/exam/testing_result';
+            location.href = baseApp + '/exam/testing_result';
         }
 
     }
@@ -355,7 +356,7 @@
         var data = {
             'timer': time
         };
-        fetch(window.location.origin + '/api/update_user_timer', {
+        fetch(baseApp + '/api/update_user_timer', {
                 method: 'post',
                 headers: {
                     'Content-Type': 'application/json',

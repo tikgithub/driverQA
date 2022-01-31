@@ -58,6 +58,7 @@
 @section('scripts')
     <script>
         function onSlide(id){
+            let baseApp = window.location.origin + '{{env('BASE_APP')}}'
            //Send data by json file
             console.log(id);
             var checkbox = document.getElementById(id);
@@ -72,7 +73,7 @@
             if(checkbox.checked ==true)
             {
                 //Update active status
-                fetch(window.location.origin + "/admin/api/tester/active/" + id)
+                fetch(baseApp + "/admin/api/tester/active/" + id)
                 .then(response => response.json)
                 .then(data=>{
                     console.log("OK");
@@ -85,7 +86,7 @@
                 });
             }
             else if(checkbox.checked == false){
-                fetch(window.location.origin + "/admin/api/tester/deactive/" + id)
+                fetch(baseApp + "/admin/api/tester/deactive/" + id)
                 .then(response => response.json)
                 .then(data=>{
                     console.log("OK");
