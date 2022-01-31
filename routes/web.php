@@ -79,3 +79,14 @@ Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
     Route::get('/testing_result',[DoTestController::class,'showTestResult'])->name('showTestResult');
 });
 
+Route::group(['prefix'=>'api','middleware'=>'sessionAuth'],function(){
+
+//Function to update timer
+Route::post('/update_user_timer',[PerformTestController::class,'updateUserTimer']);
+//Get question and answer by each question id on paper question
+Route::get('/getquestion/{id}',[DoTestController::class,'getQuestionDetail']);
+//Route to update the answer to question
+Route::get('/answer_question/{question_id}/{answer_id}',[DoTestController::class,'selectAnswer'])->name('answerQuestion');
+Route::get('/testJson',[WorkerController::class,'testJson']);
+
+});
