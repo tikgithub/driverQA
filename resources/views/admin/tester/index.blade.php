@@ -13,7 +13,7 @@
             <div class="row">
 
                 <div class="col-md-6">
-                    {{$errors}}
+                    {{sizeof($errors)}}
                     {{-- Form to add Information --}}
                     <form action="{{route('TesterStore')}}" method="post" class="NotoSanFont">
                         @include('flashMessage')

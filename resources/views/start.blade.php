@@ -19,15 +19,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              {{-- <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Home</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Features</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Pricing</a>
-              </li> --}}
+             
             </ul>
             <span class="navbar-text text-white NotoSanFont">
               <a href="{{route('getLogin')}}" class="btn btn-light"> <i class="bi bi-unlock-fill"></i>ເຂົ້າສູ່ລະບົບ</a>
@@ -83,7 +75,7 @@
                           </div>
                       </div>
                 </form>
-                
+
             </div>
         </div>
     </div>

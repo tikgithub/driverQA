@@ -36,7 +36,7 @@ Route::get('/gettoken',[WorkerController::class,'showToken']);
 /**
  * Protect Route for Admin Role
  */
-Route::group(['prefix'=>'admin'],function(){
+Route::group(['prefix'=>'admin', 'middleware'=>['authAdmin','web']],function(){
 
     Route::get('/home',[AdminController::class,'index'])->name('admin_home');
     Route::get('/logout',[LoginController::class,'logout'])->name('admin_Logout');

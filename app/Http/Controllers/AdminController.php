@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\appsetting;
 use App\Models\questions;
 use App\Models\registerTest;
 use App\Models\TestType;
@@ -44,6 +43,7 @@ class AdminController extends Controller
       * Function to show Tester page
       */
       public function showTesterManagerPage(){
+      
           $test = TestType::all();
           return view('admin.tester.index')->with('testType',$test);
 
@@ -70,13 +70,11 @@ class AdminController extends Controller
           $tester->email = $req->input('email');
           $tester->status = 'disactive';
 
-          if($tester->save()){
-              
-            return redirect()->route('TesterShow')->with('error','Server Error Please try again later');;
 
-          }else{
-            return redirect()->route('TesterShow')->with('error','ເກີດຂໍ້ຜິດພາດກະລຸນາລອງໃໝ່');
-          }
+            Session::flash('success','from flash function');
+            Session::save();
+           // dd(Session::all());
+            return redirect()->route('TesterShow')->with('success','Server Error Please try again later');
 
       }
 }
