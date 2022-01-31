@@ -58,6 +58,12 @@ Route::group(['prefix'=>'admin', 'middleware'=>['authAdmin','web']],function(){
     /** Tester controller */
     Route::get('/tester',[AdminController::class,'showTesterManagerPage'])->name('TesterShow');
     Route::post('/tester/store',[AdminController::class,'storeTester'])->name('TesterStore');
+    Route::get('/tester/search',[AdminController::class,'searchTester'])->name('TesterSearch');
+    Route::get('/tester/edit/{id}',[AdminController::class,'editTesterInfo'])->name('TesterEdit');
+    Route::post('/tester/update',[AdminController::class,'updateTesterInfo'])->name('TesterUpdate');
+    /** JSON web */
+    Route::get('/api/tester/active/{id}',[AdminController::class,'updateActiveStatusTester']);
+    Route::get('/api/tester/deactive/{id}',[AdminController::class,'updateDeActiveStatusTester']);
 });
 
 Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){

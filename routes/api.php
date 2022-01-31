@@ -22,10 +22,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
- //Function to update timer
- Route::post('/update_user_timer',[PerformTestController::class,'updateUserTimer'])->middleware('apiAuth');
- //Get question and answer by each question id on paper question
- Route::get('/getquestion/{id}',[DoTestController::class,'getQuestionDetail'])->middleware('apiAuth');
- //Route to update the answer to question
- Route::get('/answer_question/{question_id}/{answer_id}',[DoTestController::class,'selectAnswer'])->name('answerQuestion')->middleware('apiAuth');
- Route::get('/testJson',[WorkerController::class,'testJson']);
+//Function to update timer
+Route::post('/update_user_timer',[PerformTestController::class,'updateUserTimer'])->middleware('apiAuth');
+//Get question and answer by each question id on paper question
+Route::get('/getquestion/{id}',[DoTestController::class,'getQuestionDetail'])->middleware('apiAuth');
+//Route to update the answer to question
+Route::get('/answer_question/{question_id}/{answer_id}',[DoTestController::class,'selectAnswer'])->name('answerQuestion')->middleware('apiAuth');
+Route::get('/testJson',[WorkerController::class,'testJson']);

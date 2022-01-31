@@ -19,7 +19,7 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-             
+
             </ul>
             <span class="navbar-text text-white NotoSanFont">
               <a href="{{route('getLogin')}}" class="btn btn-light"> <i class="bi bi-unlock-fill"></i>ເຂົ້າສູ່ລະບົບ</a>
@@ -39,7 +39,7 @@
                 @include('flashMessage')
                 <form action="{{route('validateStater')}}" autocomplete="off" method="POST">
                     @csrf
-                    <div class="mb-3 row">
+                    {{-- <div class="mb-3 row">
                         <label for="testerFullname" class="NotoSanFont col-sm-3 col-form-label">ຊື່ ແລະ ນາມສະກຸນ</label>
                         <div class="col-sm-9">
                           <input type="text" class="form-control NotoSanFont {{$errors->has('testerFullname')? 'border-danger':''}}" id="testerFullname" name="testerFullname" value="{{old('testerFullname')}}">
@@ -47,9 +47,9 @@
                                 <p class="text-danger NotoSanFont pt-1">{{$errors->first('testerFullname')}}</p>
                             @endif
                         </div>
-                      </div>
+                      </div> --}}
                       <div class="mb-3 row">
-                        <label for="testingNo" class="NotoSanFont col-sm-3 col-form-label">ໝາຍເລກສອບເສັງ</label>
+                        <label for="testingNo" class="NotoSanFont col-sm-3  fs-4">ໝາຍເລກສອບເສັງ</label>
                         <div class="col-sm-9">
                           <input type="text" class="form-control NotoSanFont {{$errors->has('testingNo')? 'border-danger':''}}" id="testingNo" name="testingNo" value="{{old('testingNo')}}">
                           @if ($errors->has('testingNo'))
@@ -57,7 +57,7 @@
                           @endif
                         </div>
                       </div>
-                      <div class="mb-3 row" style="padding-top: 20px;">
+                      {{-- <div class="mb-3 row" style="padding-top: 20px;">
                           <label for="testTypeId" class="NotoSanFont col-md-3 col-form-label">ປະເພດສອບເສັງ</label>
                             <div class="col-md-9">
                                 @foreach ($testTypes as $item)
@@ -68,7 +68,7 @@
                                     <p class="pt-1 text-danger NotoSanFont"><b><u>{{$errors->first('testTypeId')}}</u></b></p>
                                 @endif
                             </div>
-                      </div>
+                      </div> --}}
                       <div class="row pt-5">
                           <div class="col-md-12 text-center">
                               <button type="submit" class="btn btn-danger btn-lg NotoSanFont"><i class="bi bi-watch"></i> ເຂົ້າສອບເສັງ</button>
