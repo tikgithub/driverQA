@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\appsetting;
 use App\Models\questions;
 use App\Models\registerTest;
 use App\Models\TestType;
@@ -69,12 +70,16 @@ class AdminController extends Controller
         );
 
         //Create new Object
+        //Get the testing timespan
+        $settings = appsetting::find(1)->first();
+
         $tester = new registerTest();
         $tester->testerFullname = $req->input('testerFullname');
         $tester->testingNo = $req->input('testingNo');
         $tester->testTypeId = $req->input('testTypeId');
         $tester->contact = $req->input('contact');
         $tester->email = $req->input('email');
+        $tester->testing_timespan = $settings->test_time;
         $tester->status = 'disactive';
         if ($tester->save()) {
             return redirect()->route('TesterShow')->with('success', 'ດຳເນີນການສຳເລັດ');

@@ -9,6 +9,7 @@ use App\Models\QuestionPaper;
 use App\Models\questions;
 use App\Models\registerTest;
 use App\Models\TestType;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -61,24 +62,38 @@ class WorkerController extends Controller
         if ($unique != null) {
             //Check the testing is timeout or not
             //When not timeout then check the question does user answer ?
+            error_log('test is available');
+
             if ($unique->testing_timespan != 0) {
+                error_log('$unique->testing_timespan != 0');
+
                 $questionHasBeenAnswer = QuestionPaper::where('ticket_id', '=', $unique->id, 'and')->where('answer_selected', '=', NULL)->get();
                 //Check user has answer somequestion ?
                 if (sizeof($questionHasBeenAnswer) > 0) {
+                    error_log('$questionHasBeenAnswer) > 0');
                     //Set session
                     session(['ticket' => $unique->id]);
                     session()->save();
                     //Redirect to testing page
                     return redirect()->route('doTest');
                 }
-            } //Timeout
-            else if ($unique->testing_timespan === "0") {
+                error_log('$unique->testing_timespan != 0');
+
+            }
+            error_log('after first if');
+
+            if ($unique->testing_timespan === "0") {
+                error_log('$unique->testing_timespan === "0"');
                 //Set session
                 session(['ticket' => $unique->id]);
                 session()->save();
                 //Redirect to testing page
                 return redirect()->route('showTestResult');
-            } else if ($unique->testing_timespan === null) {
+            }
+
+            error_log('after second if');
+
+            if ($unique->testing_timespan == $settings->test_time) {
 
                 // Operation To generate random question for this user with number of question in DB
                 $ranDomQuestion = questions::inRandomOrder()->limit($settings->questionNo)->get();
@@ -122,6 +137,7 @@ class WorkerController extends Controller
         } else {
             return redirect()->route('starterPage')->with('error', 'ບໍ່ສາມາດສອບເສັງໄດ້ກະລຸນາພົວພັນກັບຫ້ອງການສອບເສັງ')->withInput();
         }
+        error_log("exit function");
     }
 
     /**
