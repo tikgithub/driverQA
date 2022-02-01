@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }}</title>
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('customStyle/app.css') }}">
@@ -139,6 +140,7 @@
     let REMEMBER_ANSWER_SELECT = "";
     let NUMBER_OF_ANSWER_QUESTION = [];
     let baseApp = window.location.origin + '{{env('BASE_APP')}}'
+    const csrfToken = document.head.querySelector("[name~=csrf-token][content]").content;
 
     //After loading page complete
     //Collect the answer have been answer to array list
@@ -209,7 +211,8 @@
         fetch(baseApp + '/api/answer_question/' + quest_id + '/' + answer_id, {
                 method: 'get',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                 
                 }
             })
             .then(res => res.json())

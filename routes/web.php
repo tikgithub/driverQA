@@ -81,8 +81,7 @@ Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
 
 Route::group(['prefix'=>'api','middleware'=>'sessionAuth'],function(){
 
-//Function to update timer
-Route::post('/update_user_timer',[PerformTestController::class,'updateUserTimer']);
+
 //Get question and answer by each question id on paper question
 Route::get('/getquestion/{id}',[DoTestController::class,'getQuestionDetail']);
 //Route to update the answer to question
