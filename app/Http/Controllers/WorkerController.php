@@ -61,40 +61,7 @@ class WorkerController extends Controller
         //Check if unique then return to start page
         if ($unique != null) {
             //Check the testing is timeout or not
-            //When not timeout then check the question does user answer ?
-            error_log('test is available');
-
-            if ($unique->testing_timespan != 0) {
-                error_log('$unique->testing_timespan != 0');
-
-                $questionHasBeenAnswer = QuestionPaper::where('ticket_id', '=', $unique->id, 'and')->where('answer_selected', '=', NULL)->get();
-                //Check user has answer somequestion ?
-                if (sizeof($questionHasBeenAnswer) > 0) {
-                    error_log('$questionHasBeenAnswer) > 0');
-                    //Set session
-                    session(['ticket' => $unique->id]);
-                    session()->save();
-                    //Redirect to testing page
-                    return redirect()->route('doTest');
-                }
-                error_log('$unique->testing_timespan != 0');
-
-            }
-            error_log('after first if');
-
-            if ($unique->testing_timespan === "0") {
-                error_log('$unique->testing_timespan === "0"');
-                //Set session
-                session(['ticket' => $unique->id]);
-                session()->save();
-                //Redirect to testing page
-                return redirect()->route('showTestResult');
-            }
-
-            error_log('after second if');
-
             if ($unique->testing_timespan == $settings->test_time) {
-
                 // Operation To generate random question for this user with number of question in DB
                 $ranDomQuestion = questions::inRandomOrder()->limit($settings->questionNo)->get();
                 // //Perform Update data and contionue to Testing page
@@ -134,12 +101,33 @@ class WorkerController extends Controller
                 //Redirect to testing page
                 return redirect()->route('doTest');
             }
+
+            if ($unique->testing_timespan < $settings->test_time && $unique->testing_timespan !== "0") {
+                $questionHasBeenAnswer = QuestionPaper::where('ticket_id', '=', $unique->id, 'and')->where('answer_selected', '=', NULL)->get();
+                //Check user has answer somequestion ?
+                if (sizeof($questionHasBeenAnswer) >= 0) {
+                    error_log('$questionHasBeenAnswer) > 0');
+                    //Set session
+                    session(['ticket' => $unique->id]);
+                    session()->save();
+                    //Redirect to testing page
+                    return redirect()->route('doTest');
+                }
+            }
+
+            if ($unique->testing_timespan === "0") {
+                //Set session
+                session(['ticket' => $unique->id]);
+                session()->save();
+                //Redirect to testing page
+                return redirect()->route('showTestResult');
+            }
+
         } else {
             return redirect()->route('starterPage')->with('error', 'ບໍ່ສາມາດສອບເສັງໄດ້ກະລຸນາພົວພັນກັບຫ້ອງການສອບເສັງ')->withInput();
         }
         error_log("exit function");
     }
-
     /**
      * Function to call the testing page of user
      */

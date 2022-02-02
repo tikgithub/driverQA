@@ -20,7 +20,7 @@ class DoTestController extends Controller
      */
     public function getPaperTest(){
         //Get ticket ID
-        
+
         $ticket_id = session(['ticket']);
         dd($ticket_id);
         //$question = QuestionPaper::where('ticket_id','=',$ticket_id)->get();
@@ -38,11 +38,11 @@ class DoTestController extends Controller
 
     /** Function to select answer and save to db */
     public function selectAnswer($question_id, $answer_id){
-        $answerData = Choice::find($answer_id);
+        $answerData = AnswerPaper::find($answer_id);
         $questPaper = QuestionPaper::find($question_id);
         $questPaper->answer_selected = $answerData->id;
-        $questPaper->answer_selected_title = $answerData->pointing;
-        
+        $questPaper->answer_selected_title = $answerData->answer_title;
+
         if($questPaper->save()){
             return response(200);
         }else{
@@ -50,7 +50,7 @@ class DoTestController extends Controller
         }
     }
 
-    /** 
+    /**
      * Function to submit the test if user finish
      */
     public function submitExam(){
@@ -74,22 +74,24 @@ class DoTestController extends Controller
         $countAllQuestion = QuestionPaper::where('ticket_id','=',$ticket_id)->count();
         //Question not answered
         $countQuestionNotAnswered = QuestionPaper::where('ticket_id','=',$ticket_id)->where('answer_selected','=',NULL)->count();
-  
+
         $countWrongQuestion = DB::select("SELECT * FROM question_papers WHERE  correct_answer != answer_selected_title and ticket_id = ?",[$ticket_id]);
        // dd($countWrongQuestion);
 
        //Question not correct list
        $questionWrongList = DB::select("
-                SELECT qp.question_string,
-            ap.answer_title , ap.answer_text,
-            (CASE 
-                WHEN correct_answer != answer_selected_title THEN 'False'
-                WHEN correct_answer = answer_selected_title THEN 'True'
-                WHEN answer_selected_title is NULL THEN NULL
-            END)
-            as correctOrNot
-            from question_papers qp left join answer_papers ap on ap.id = qp.answer_selected 
-            WHERE qp.ticket_id = ?",[$ticket_id]);
+       SELECT ap .paper_id ,
+		qp.question_string,
+       (CASE
+           WHEN correct_answer != answer_selected_title THEN 'False'
+           WHEN correct_answer = answer_selected_title THEN 'True'
+           WHEN answer_selected_title is NULL THEN NULL
+       END)
+       as correctOrNot,
+       concat(qp.correct_answer,'.',(SELECT aps.answer_text from answer_papers aps where aps.answer_title = qp.correct_answer and aps.paper_id=qp.id))  as real_answer,
+       concat(qp.answer_selected_title,'.', (SELECT aps.answer_text from answer_papers aps where aps.answer_title = qp.answer_selected_title and aps.paper_id=qp.id))as user_selected
+       from question_papers qp left join answer_papers ap on ap.id = qp.answer_selected
+       WHERE qp.ticket_id = ?",[$ticket_id]);
 
         return view('showExampResult')
         ->with('countAllQuestion', $countAllQuestion)

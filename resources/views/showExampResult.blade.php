@@ -28,7 +28,7 @@
                 </h3>
             </div>
         </div>
-       
+
 
     </div>
     {{--  --}}
@@ -42,7 +42,7 @@
         </div>
       </nav>
    {{-- Modal --}}
-  
+
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
@@ -57,20 +57,32 @@
                 <tr>
                     <td>#</td>
                     <td>ຄຳຖາມທີ່ຕອບຜິດ</td>
-                    <td>ຄຳຕອບທີ່ເລືອກ</td>
+                    <td>ຄຳຕອບທີ່ຖືກຕ້ອງ</td>
+                    <td>ຄຳຕອບທີ່ທ່ານເລືອກ</td>
                     <td class="text-center fs-4"><i class="bi bi-check-all"></i></td>
                 </tr>
             </thead>
             <tbody class="NotoSanFont">
                 @foreach ($questinoWrongList as $item)
-                    <tr>
+                    <tr
+                        @if ($item->correctOrNot == 'True')
+                                style="background-color: #9bf2b2"
+                        @elseif ($item->correctOrNot == 'False')
+                                style="background-color: #f5856c"
+                        @elseif ($item->correctOrNot == '')
+                                style="background-color: #d9d5d4"
+                        @endif
+                    >
                         <td>{{$loop->index + 1}}</td>
                         <td>{{$item->question_string}}</td>
-                        @if ($item->answer_text)
-                            <td>{{$item->answer_title}}. {{$item->answer_text}}</td>
-                        @else
-                            <td>ບໍ່ໄດ້ຕອບ</td>
-                        @endif
+                        <td>{{$item->real_answer}}</td>
+                        <td>
+                            @if ($item->user_selected)
+                                {{$item->user_selected}}
+                            @else
+                                {{"ບໍ່ໄດ້ຕອບ"}}
+                            @endif
+                        </td>
                         <td class="text-center">
                             @if ($item->correctOrNot == 'True')
                                 <img src="{{asset('image/checked.png')}}" width="auto" height="30">
@@ -80,7 +92,7 @@
                                 <i class="bi bi-dash-lg"></i>
                             @endif
                         </td>
-                        
+
                     </tr>
                 @endforeach
             </tbody>
