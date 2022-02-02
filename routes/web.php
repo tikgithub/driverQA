@@ -10,6 +10,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\WorkerController;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {return view('welcome');})->name('welcome');
+Route::get('/', function () {
+    Session::forget('ticket');
+    Session::flush();
+    return view('welcome');
+})->name('welcome');
 /** Route to call starter input page */
 Route::get('/starter',[WorkerController::class,'starterPage'])->name('starterPage');
 /** Route to validate the starter submit */
@@ -77,6 +82,10 @@ Route::group(['prefix'=>'exam','middleware'=>'sessionAuth'],function(){
     Route::get('/finish_exam',[DoTestController::class,'submitExam'])->name('submitExam');
     //Route for display testing result
     Route::get('/testing_result',[DoTestController::class,'showTestResult'])->name('showTestResult');
+    //Route to reset the user testing result
+    Route::post('/reset_exam',[DoTestController::class,'resetTest'])->name('resetExam');
+    //Route Validate the tester from reset functino
+    Route::get('/validate_tester',[WorkerController::class, 'validateTester'])->name('validateTester');
 });
 
 Route::group(['prefix'=>'api','middleware'=>'sessionAuth'],function(){

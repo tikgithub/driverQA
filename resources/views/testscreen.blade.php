@@ -283,7 +283,6 @@
                     imageContainer.appendChild(imageBox);
 
                 }
-
                 var answers = data.Answers;
                 for (let i = 0; i < answers.length; i++) {
                     var li = document.createElement('li');
@@ -291,7 +290,7 @@
                     choiceContainer.appendChild(li);
                     //Create button for user click answer
                     var answerBtn = document.createElement('a');
-                    answerBtn.innerHTML = answers[i].answer_title + "(" + answers[i].id +")";
+                    answerBtn.innerHTML = answers[i].answer_title;
                     answerBtn.classList.add('NotoSanFont', 'btn', 'btn-danger', 'me-4', 'fs-2');
                     answerBtn.style.cssText = 'padding-left:40px; padding-right:40px;';
                     //Check answer click ?

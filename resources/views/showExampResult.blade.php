@@ -12,9 +12,10 @@
 </head>
 <body>
     <div class="container bg-danger p-3 border rounded mt-3 shadow">
-        <div class="row " style="height: 400px;">
+        <div class="row " style="height: 550px;">
             <div class="col-md-12 text-center text-white">
-                <h1 class="NotoSanFont">
+                <img src="{{asset('image/logo.png')}}" style="width: auto; height: 200px; border-radius: 50%; object-fit: cover">
+                <h1 class="NotoSanFont mt-2">
                    <b> ຜົນການສອບເສັງໃບຂັບຂີ່ ພາກທິດສະດີ {{$testType->name}}</b>
                 </h1>
                 <h3 class="NotoSanFont">
@@ -23,9 +24,21 @@
                 <h3 class="NotoSanFont">
                     ເລກທີຜູ້ສອບເສັງ: <b><u>{{$register->testingNo}}</u></b>
                 </h3>
-                <h3 class="NotoSanFont" style="padding-top: 100px;">
+                <h3 class="NotoSanFont" style="padding-top: 50px;">
                    <b> ຕອບຜິດ {{sizeof($countWrongQuestion)}} ຂໍ້, ຍັງບໍ່ໄດ້ຕອບ {{$countQuestionNotAnswered}}, ທັງໝົດ {{$countAllQuestion}} ຂໍ້</b>
                 </h3>
+                <br>
+                <h1 class="NotoSanFont">
+                    @if ($test_status===1)
+                        <b>ຜ່ານ</b>
+                    @elseif($test_status===0)
+                        <b>
+                            ບໍ່ຜ່ານ
+                        </b>
+                    @else
+                        <b>UNKNOW STATUS</b>
+                    @endif
+                </h1>
             </div>
         </div>
 
@@ -33,16 +46,45 @@
     </div>
     {{--  --}}
     {{-- Footer --}}
-    <nav class="navbar navbar-light bg-danger fixed-bottom" >
+    <nav class="navbar navbar-light bg-danger fixed-bottom">
         <div class="container-fluid justify-content-center">
             <a href="{{route('welcome')}}" class="btn btn-light me-2 NotoSanFont" type="button"><i class="bi bi-house-door"></i> ກັບໜ້າຫຼັກ</a>
 
              <!-- Button trigger modal -->
             <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-secondary NotoSanFont" type="button"><i class="bi bi-exclamation-circle-fill"></i> ເບິ່ງຄຳຖາມທີ່ຕອບຜິດ</button>
+
+             <!-- Button trigger modal -->
+             <button data-bs-toggle="modal" data-bs-target="#resetModal" class="ms-2 btn btn-primary NotoSanFont" type="button"><i class="bi bi-arrow-clockwise"></i> ສອບເສັງໃໝ່ອີກຄັ້ງ</button>
+
         </div>
       </nav>
-   {{-- Modal --}}
 
+{{-- Modal for retest confirmation --}}
+<!-- Modal -->
+<div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="resetModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title NotoSanFont" id="resetModalLabel">ແຈ້ງເຕືອນ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body NotoSanFont">
+            ທ່ານຕ້ອງການສອບເສັງຄືນໃໝ່ ?<br>
+            <b>ໝາຍເຫດ:</b> ສອບເສັງຄືນໃຫມ່ຈະເຮັດໃຫ້ ຜົນສອບເສັງທີ່ຜ່ານມາຖືກລົບລ້າງ
+        </div>
+
+        <div class="modal-footer NotoSanFont">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ອອກ</button>
+          <form action="{{route('resetExam')}}" method="POST">
+            @csrf
+            <button type="submit" class="btn btn-danger">ຍິນຍອມ</button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+{{-- End Modal for retest confirmation --}}
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-fullscreen">
@@ -92,7 +134,6 @@
                                 <i class="bi bi-dash-lg"></i>
                             @endif
                         </td>
-
                     </tr>
                 @endforeach
             </tbody>
