@@ -62,6 +62,14 @@ class WorkerController extends Controller
         if ($unique != null) {
             //Check the testing is timeout or not
             if ($unique->testing_timespan == $settings->test_time) {
+                //Reset User question and answer
+                $lastQ = QuestionPaper::where('ticket_id','=',$unique->id)->get();
+               // dd($lastQ);
+               for($i=0;$i<sizeof($lastQ);$i++){
+                   AnswerPaper::where('id','=',$lastQ[$i]->id)->delete();
+               }
+                QuestionPaper::where('ticket_id','=',$unique->id)->delete();
+
                 // Operation To generate random question for this user with number of question in DB
                 $ranDomQuestion = questions::inRandomOrder()->limit($settings->questionNo)->get();
                 // //Perform Update data and contionue to Testing page
